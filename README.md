@@ -20,6 +20,11 @@ python3 -m http.server 4173 --directory dist
 
 Then open `http://127.0.0.1:4173`.
 
+## Deploy to Vercel
+
+Import the repository with the Framework Preset set to **Other**. The included
+`vercel.json` publishes the static app from `dist` with no build command.
+
 ## Privacy
 
 Responses remain in the visitor's browser. Exported lists omit answers marked private.
