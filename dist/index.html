@@ -10,7 +10,7 @@
   <link rel="shortcut icon" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -45,7 +45,7 @@
         <div class="hero-copy">
           <p class="eyebrow">An adult desire deck</p>
           <h1>Know your <em>yes.</em><br>Own your <em>desire.</em></h1>
-          <p class="lede">Read the room inside your head. Explore 84 prompts, separate fantasy from intent, name your role, and see the shape of your curiosity.</p>
+          <p class="lede">Three rounds. Eighteen delicious questions each. Find out how far your curiosity really goes—and leave with a Freak Level that is unmistakably yours.</p>
           <div class="hero-actions">
             <button class="primary" id="startBtn">Start the deck <span>↓</span></button>
             <button class="secondary" id="shuffleHero">Shuffle my first draw</button>
@@ -62,7 +62,7 @@
       <section class="game-section" id="play">
         <div class="section-head">
           <div><p class="eyebrow">01 · The deck</p><h2>What’s your temperature?</h2></div>
-          <div class="progress-meta"><span id="progressText">0 / 84 explored</span><div class="progress"><i id="progressBar"></i></div></div>
+          <div class="progress-meta"><span id="progressText">0 / 18 explored</span><span class="streak" id="streakText">Ready when you are</span><div class="progress"><i id="progressBar"></i></div></div>
         </div>
 
         <div class="filters" id="filters" aria-label="Filter prompt categories"></div>
@@ -81,6 +81,7 @@
               <p><span id="cardIndex">01</span> / <span id="deckTotal">48</span></p>
               <button class="round-btn" id="nextBtn" aria-label="Next card">→</button>
             </div>
+            <button class="skip-card" id="skipBtn">Not feeling this one — skip it ↝</button>
           </div>
 
           <aside class="intel">
@@ -105,7 +106,7 @@
             <div class="legend" id="legend"></div>
           </div>
           <div class="result-list-card">
-            <div class="freak-type"><span>Your freak type</span><strong id="freakType">Still loading…</strong><p id="freakBlurb">Answer a few cards and your archetype will appear.</p></div>
+            <div class="freak-type"><span>Your freak type</span><strong id="freakType">Still loading…</strong><p id="freakBlurb">Answer a few cards and your archetype will appear.</p><div class="freak-score"><b id="freakScore">0.0</b><em>/10</em><div><i id="freakScoreBar"></i></div><small id="freakScoreLabel">Warming up</small></div></div>
             <div class="result-tabs"><button class="active" data-result="yes">Top yeses</button><button data-result="curious">Curious</button><button data-result="fantasy">Fantasy only</button><button data-result="no">Clear limits</button></div>
             <div id="resultList" class="result-list"></div>
             <div class="result-actions export-actions"><button class="primary" id="imageBtn">Download image <span>↓</span></button><button class="secondary" id="videoBtn">Animated MP4</button><button class="secondary" id="copyBtn">Copy text</button><button class="text-btn" id="resetBtn">Reset</button></div>
@@ -122,12 +123,11 @@
         <p class="eyebrow">Choose your temperature</p>
         <h2 id="setupTitle">Build tonight’s deck.</h2>
         <div class="deck-options">
-          <button class="deck-option active" data-mode="quick"><b>Quick pulse</b><span>24 balanced prompts · about 4 minutes</span></button>
-          <button class="deck-option" data-mode="full"><b>Full spectrum</b><span>All 84 prompts · your complete map</span></button>
-          <button class="deck-option" data-mode="edge"><b>After dark</b><span>48 medium-to-high heat prompts</span></button>
+          <button class="deck-option active" data-mode="basic"><b>Basic</b><span>Flirty, playful, and easy to answer · 18 cards</span></button>
+          <button class="deck-option" data-mode="intense"><b>Intense</b><span>More control, more tension, more heat · 15 cards</span></button>
+          <button class="deck-option nasty" data-mode="nasty"><b>Nasty</b><span>Edge fantasies and unapologetic curiosity · 18 cards</span></button>
         </div>
         <div class="setup-toggles">
-          <label><input type="checkbox" id="includeEdge"><span><b>Include edge themes</b><small>Advanced or high-risk fantasies, clearly marked</small></span></label>
           <label><input type="checkbox" id="reducedMotion"><span><b>Calm motion</b><small>Reduce ambient animation and transitions</small></span></label>
         </div>
         <button class="primary setup-go" id="setupGo">Deal my cards <span>→</span></button>
@@ -138,8 +138,9 @@
         <button class="setup-close" id="drawerClose" aria-label="Close">×</button>
         <p class="eyebrow">Refine your answer</p><h3 id="drawerTitle"></h3>
         <p class="drawer-copy">Interest is not consent. Choose what this answer means to you.</p>
-        <div class="drawer-group"><b>Context</b><div id="contextChoices" class="choice-chips"></div></div>
-        <div class="drawer-group"><b>Preferred role</b><div id="roleChoices" class="choice-chips"></div></div>
+        <div class="drawer-group"><b id="contextLabel">Where does this live?</b><div id="contextChoices" class="choice-chips"></div></div>
+        <div class="drawer-group"><b id="roleLabel">How do you want it?</b><div id="roleChoices" class="choice-chips"></div></div>
+        <p class="drawer-safety" id="drawerSafety"></p>
         <label class="private-check"><input type="checkbox" id="privateChoice"> Keep this response private from exports</label>
         <button class="primary" id="saveDetail">Save & continue <span>→</span></button>
       </div>
