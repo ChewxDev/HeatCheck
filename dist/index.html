@@ -30,6 +30,7 @@
     <header class="topbar">
       <a class="brand" href="#" aria-label="Heatcheck home"><i></i> HEATCHECK</a>
       <div class="top-actions">
+        <button class="text-btn danger-link" id="panicBtn">Panic clear</button>
         <button class="text-btn" id="soundBtn" aria-pressed="true">Sound on</button>
         <button class="pill" id="resultsBtn">My pulse <span id="resultCount">0</span></button>
       </div>
@@ -40,7 +41,7 @@
         <div class="hero-copy">
           <p class="eyebrow">An adult desire deck</p>
           <h1>Know your <em>yes.</em><br>Own your <em>no.</em></h1>
-          <p class="lede">Read the room inside your head. Rate 48 prompts from “hard no” to “hell yes,” then see the shape of your curiosity.</p>
+          <p class="lede">Read the room inside your head. Explore 84 prompts, separate fantasy from intent, name your role, and see the shape of your curiosity.</p>
           <div class="hero-actions">
             <button class="primary" id="startBtn">Start the deck <span>↓</span></button>
             <button class="secondary" id="shuffleHero">Shuffle my first draw</button>
@@ -48,7 +49,7 @@
         </div>
         <div class="orb-wrap" aria-hidden="true">
           <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
-          <div class="orb"><div class="orb-liquid"></div><span>48</span><small>prompts</small></div>
+          <div class="orb"><div class="orb-liquid"></div><span>84</span><small>prompts</small></div>
           <span class="float-label l1">LIMITS</span><span class="float-label l2">CURIOSITY</span><span class="float-label l3">DESIRE</span>
         </div>
         <div class="scroll-note">SCROLL TO PLAY <span>↓</span></div>
@@ -57,7 +58,7 @@
       <section class="game-section" id="play">
         <div class="section-head">
           <div><p class="eyebrow">01 · The deck</p><h2>What’s your temperature?</h2></div>
-          <div class="progress-meta"><span id="progressText">0 / 48 explored</span><div class="progress"><i id="progressBar"></i></div></div>
+          <div class="progress-meta"><span id="progressText">0 / 84 explored</span><div class="progress"><i id="progressBar"></i></div></div>
         </div>
 
         <div class="filters" id="filters" aria-label="Filter prompt categories"></div>
@@ -84,7 +85,7 @@
             <h3 id="sideTitle">The prompt changes as you play.</h3>
             <p id="sideCopy">Go with your first instinct. You can change any answer later.</p>
             <div class="safety-note"><span>✦</span><p><b>Consent stays live.</b> Any activity can stop at any moment, for any reason.</p></div>
-            <p class="keyhint">Keyboard: <kbd>1</kbd>–<kbd>5</kbd> to rate · <kbd>→</kbd> next</p>
+              <p class="keyhint">Keyboard: <kbd>1</kbd>–<kbd>5</kbd> to rate · <kbd>→</kbd> next · <kbd>L</kbd> hard limit</p>
           </aside>
         </div>
       </section>
@@ -100,7 +101,7 @@
             <div class="legend" id="legend"></div>
           </div>
           <div class="result-list-card">
-            <div class="result-tabs"><button class="active" data-result="yes">Top yeses</button><button data-result="curious">Curious</button><button data-result="no">Clear limits</button></div>
+            <div class="result-tabs"><button class="active" data-result="yes">Top yeses</button><button data-result="curious">Curious</button><button data-result="fantasy">Fantasy only</button><button data-result="no">Clear limits</button></div>
             <div id="resultList" class="result-list"></div>
             <div class="result-actions"><button class="primary" id="copyBtn">Copy my list <span>↗</span></button><button class="secondary" id="resetBtn">Reset</button></div>
           </div>
@@ -110,6 +111,34 @@
     </main>
 
     <footer><a class="brand" href="#"><i></i> HEATCHECK</a><p>For consenting adults. Built for honest conversations.</p><button class="text-btn" id="privacyBtn">Privacy</button></footer>
+    <section class="setup-modal" id="setupModal" hidden aria-modal="true" role="dialog" aria-labelledby="setupTitle">
+      <div class="setup-card">
+        <button class="setup-close" id="setupClose" aria-label="Close">×</button>
+        <p class="eyebrow">Choose your temperature</p>
+        <h2 id="setupTitle">Build tonight’s deck.</h2>
+        <div class="deck-options">
+          <button class="deck-option active" data-mode="quick"><b>Quick pulse</b><span>24 balanced prompts · about 4 minutes</span></button>
+          <button class="deck-option" data-mode="full"><b>Full spectrum</b><span>All 84 prompts · your complete map</span></button>
+          <button class="deck-option" data-mode="edge"><b>After dark</b><span>48 medium-to-high heat prompts</span></button>
+        </div>
+        <div class="setup-toggles">
+          <label><input type="checkbox" id="includeEdge"><span><b>Include edge themes</b><small>Advanced or high-risk fantasies, clearly marked</small></span></label>
+          <label><input type="checkbox" id="reducedMotion"><span><b>Calm motion</b><small>Reduce ambient animation and transitions</small></span></label>
+        </div>
+        <button class="primary setup-go" id="setupGo">Deal my cards <span>→</span></button>
+      </div>
+    </section>
+    <div class="detail-drawer" id="detailDrawer" hidden>
+      <div class="drawer-card">
+        <button class="setup-close" id="drawerClose" aria-label="Close">×</button>
+        <p class="eyebrow">Refine your answer</p><h3 id="drawerTitle"></h3>
+        <p class="drawer-copy">Interest is not consent. Choose what this answer means to you.</p>
+        <div class="drawer-group"><b>Context</b><div id="contextChoices" class="choice-chips"></div></div>
+        <div class="drawer-group"><b>Preferred role</b><div id="roleChoices" class="choice-chips"></div></div>
+        <label class="private-check"><input type="checkbox" id="privateChoice"> Keep this response private from exports</label>
+        <button class="primary" id="saveDetail">Save & continue <span>→</span></button>
+      </div>
+    </div>
     <div class="toast" id="toast" role="status"></div>
   </div>
   <script src="app.js"></script>
