@@ -1,0 +1,54 @@
+const prompts=[
+['Taking the lead','Dynamics',1,'You set the pace and make the calls.','♟'],['Giving up control','Dynamics',1,'You choose to hand someone else the reins.','◒'],['Switching roles','Dynamics',1,'Power changes hands when the mood does.','⇄'],['Protocol & rituals','Dynamics',2,'Rules, titles, and intentional structure.','⌁'],['Service-oriented play','Dynamics',2,'Pleasure found in acts of devoted service.','◇'],['Being worshipped','Dynamics',2,'Focused admiration, attention, and praise.','✦'],['Strict power exchange','Dynamics',4,'A deeply negotiated authority dynamic.','♛'],['Consensual non-consent fantasy','Dynamics',5,'High-intensity roleplay with explicit advance negotiation.','⚠'],
+['Blindfolds','Sensation',1,'Let anticipation sharpen every touch.','●'],['Temperature play','Sensation',2,'Warmth and coolness as contrast.','⌇'],['Wax play','Sensation',3,'Controlled heat in a negotiated scene.','♨'],['Sensory deprivation','Sensation',3,'Reducing sight, sound, or movement.','◼'],['Electrostimulation','Sensation',4,'Specialized sensation with safety knowledge.','ϟ'],['Needle play','Sensation',5,'Advanced edge play requiring trained technique.','△'],['Blood play','Sensation',5,'High-risk edge play with strict protocols.','◆'],['Breath restriction fantasy','Sensation',5,'A fantasy category carrying serious real-world risk.','⚠'],
+['Spanking','Impact',1,'Rhythm, anticipation, and sting.','╳'],['Paddles','Impact',2,'Broad, controlled impact.','▰'],['Flogging','Impact',3,'Repetitive impact ranging from soft to intense.','〰'],['Canes','Impact',4,'Focused, advanced impact sensation.','╱'],['Heavy impact','Impact',5,'Intense play with deliberate limits and skill.','✹'],['Leaving marks','Impact',4,'Temporary evidence, explicitly agreed to.','//'],['Impact endurance','Impact',4,'The mental challenge of sustained sensation.','∞'],['Playful punishment','Impact',2,'Consequences inside an agreed dynamic.','!'],
+['Cuffs','Restraint',1,'Simple, intentional restriction.','○'],['Rope bondage','Restraint',2,'The ritual and geometry of rope.','⌘'],['Being restrained','Restraint',2,'Stillness chosen on your own terms.','□'],['Restraining a partner','Restraint',2,'Holding control with care and attention.','⊞'],['Predicament bondage','Restraint',4,'Position creates a negotiated challenge.','△'],['Suspension fantasy','Restraint',5,'Advanced rope requiring trained rigging.','⌃'],['Strict immobilization','Restraint',4,'Intense restriction with active monitoring.','▦'],['Escape play','Restraint',3,'The thrill of testing a secure hold.','↝'],
+['Praise','Mind games',1,'Words that make you glow.','✧'],['Dirty talk','Mind games',1,'Saying the charged thing out loud.','“”'],['Teasing & denial','Mind games',2,'Anticipation stretched on purpose.','…'],['Humiliation fantasy','Mind games',4,'Negotiated language that feels transgressive.','↓'],['Being watched','Mind games',3,'Attention as part of the thrill.','◉'],['Exhibition fantasy','Mind games',3,'The fantasy of being seen in an adult setting.','◎'],['Fear play','Mind games',5,'Simulated danger inside tightly held boundaries.','▲'],['Interrogation roleplay','Mind games',4,'Psychological intensity inside a scripted scene.','?'],
+['Roleplay','Play',1,'Stepping into characters together.','◫'],['Costumes','Play',1,'Clothes that change the energy.','♢'],['Pet play','Play',2,'Instinct, affection, training, or playfulness.','♧'],['Objectification fantasy','Play',4,'Chosen depersonalization inside clear limits.','◌'],['Group fantasy','Play',3,'More adult participants, more communication.','∴'],['Public-play fantasy','Play',4,'The thrill of exposure without involving bystanders.','⊙'],['Orgasm control','Play',3,'Permission and anticipation shape the moment.','⌛'],['Aftercare ritual','Play',1,'Intentional reconnection after intensity.','♡']
+];
+const labels=['Hard no','Not now','Curious','Yes','Hell yes'];
+const colors=['#59505b','#8a667f','#fb5cb8','#ff4d00','#d6ff2f'];
+let state={answers:{},category:'All',index:0,sound:true,resultTab:'yes'};
+try{Object.assign(state,JSON.parse(localStorage.getItem('heatcheck-v1'))||{})}catch(e){}
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const save=()=>localStorage.setItem('heatcheck-v1',JSON.stringify(state));
+const filtered=()=>prompts.map((p,i)=>({...p,id:i})).filter(p=>state.category==='All'||p[1]===state.category);
+const beep=(n=3)=>{if(!state.sound)return;try{const a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.frequency.value=160+n*58;g.gain.setValueAtTime(.035,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.1);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+.1)}catch(e){}};
+const toast=t=>{const x=$('#toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)};
+function setup(){
+  const cats=['All',...new Set(prompts.map(p=>p[1]))];
+  $('#filters').innerHTML=cats.map(c=>`<button class="${c==='All'?'active':''}" data-cat="${c}">${c}</button>`).join('');
+  $('#meterStack').innerHTML=labels.map((l,i)=>`<div class="meter"><i></i><b>${i+1}</b></div>`).join('');
+  $('#adultCheck').onchange=e=>$('#enterBtn').disabled=!e.target.checked;
+  $('#enterBtn').onclick=()=>{$('#gate').classList.add('out');$('#app').classList.add('entered');$('#app').setAttribute('aria-hidden','false');sessionStorage.setItem('heatcheck-adult','yes')};
+  if(sessionStorage.getItem('heatcheck-adult')){$('#gate').classList.add('out');$('#app').classList.add('entered');$('#app').setAttribute('aria-hidden','false')}
+  $('#startBtn').onclick=()=>$('#play').scrollIntoView();
+  $('#shuffleHero').onclick=()=>{state.index=Math.floor(Math.random()*prompts.length);renderCards();$('#play').scrollIntoView()};
+  $('#randomBtn').onclick=()=>{state.index=Math.floor(Math.random()*filtered().length);renderCards();beep(4)};
+  $('#prevBtn').onclick=()=>move(-1);$('#nextBtn').onclick=()=>move(1);
+  $('#resultsBtn').onclick=()=>{$('#results').scrollIntoView();renderResults()};
+  $('#soundBtn').onclick=e=>{state.sound=!state.sound;e.currentTarget.textContent=state.sound?'Sound on':'Sound off';e.currentTarget.setAttribute('aria-pressed',state.sound);save()};
+  $('#filters').onclick=e=>{if(!e.target.dataset.cat)return;state.category=e.target.dataset.cat;state.index=0;$$('#filters button').forEach(b=>b.classList.toggle('active',b===e.target));renderCards()};
+  $$('.result-tabs button').forEach(b=>b.onclick=()=>{state.resultTab=b.dataset.result;$$('.result-tabs button').forEach(x=>x.classList.toggle('active',x===b));renderList()});
+  $('#copyBtn').onclick=copyList;
+  $('#resetBtn').onclick=()=>{if(confirm('Clear every answer and start fresh?')){state.answers={};state.index=0;save();renderAll();toast('Fresh slate.')}};
+  $('#privacyBtn').onclick=()=>toast('Everything is stored only in this browser.');
+  window.addEventListener('keydown',e=>{if($('#gate').classList.contains('out')){if(/[1-5]/.test(e.key))rate(+e.key);if(e.key==='ArrowRight')move(1);if(e.key==='ArrowLeft')move(-1)}});
+  window.addEventListener('pointermove',e=>{document.documentElement.style.setProperty('--mx',e.clientX+'px');document.documentElement.style.setProperty('--my',e.clientY+'px')});
+  renderAll();
+}
+function move(d){const a=filtered();state.index=(state.index+d+a.length)%a.length;renderCards();beep(2)}
+function rate(n){const p=filtered()[state.index];if(!p)return;state.answers[p.id]=n;save();beep(n);updateStats();const btn=document.querySelector(`.card.active .ratings button:nth-child(${n})`);if(btn){btn.classList.add('selected');setTimeout(()=>move(1),260)}}
+function renderCards(){const a=filtered();state.index=Math.min(state.index,a.length-1);const p=a[state.index];if(!p)return;const cards=[-1,0,1].map(offset=>{const ix=(state.index+offset+a.length)%a.length,q=a[ix],ans=state.answers[q.id];return `<article class="card ${offset<0?'before':offset===0?'active':''}" data-id="${q.id}"><div class="card-kicker"><span>${q[1]}</span><span>${String(ix+1).padStart(2,'0')} / ${String(a.length).padStart(2,'0')}</span></div><div class="card-icon">${q[4]}</div><h3>${q[0]}</h3><p>${q[3]}</p><div class="ratings">${labels.map((l,i)=>`<button class="${ans===i+1?'selected':''}" data-rate="${i+1}"><b>${i+1}</b><br>${l}</button>`).join('')}</div></article>`}).join('');
+  $('#cards').innerHTML=cards;$('#cards').onclick=e=>{const n=e.target.closest('[data-rate]')?.dataset.rate;if(n)rate(+n)};
+  $('#cardIndex').textContent=String(state.index+1).padStart(2,'0');$('#deckTotal').textContent=a.length;
+  $('#categoryLabel').textContent=p[1];$('#sideTitle').textContent=p[0];$('#sideCopy').textContent=p[3];
+  $('#intensityBadge').textContent=p[2]>=4?'EDGE / HIGH HEAT':p[2]===3?'MEDIUM HEAT':'LOW HEAT';$('#intensityBadge').classList.toggle('edge',p[2]>=4);
+  updateStats();
+}
+function updateStats(){const vals=Object.values(state.answers),n=vals.length;$('#progressText').textContent=`${n} / ${prompts.length} explored`;$('#progressBar').style.width=`${n/prompts.length*100}%`;$('#resultCount').textContent=n;labels.forEach((_,i)=>{const c=vals.filter(v=>v===i+1).length;$$('.meter i')[i].style.height=`${n?Math.max(4,c/n*100):0}%`});renderResults()}
+function renderResults(){const cats=[...new Set(prompts.map(p=>p[1]))],scores=cats.map(c=>{const ps=prompts.map((p,i)=>({...p,id:i})).filter(p=>p[1]===c&&state.answers[p.id]);return ps.length?ps.reduce((s,p)=>s+state.answers[p.id],0)/ps.length:0});const total=Object.values(state.answers),avg=total.length?(total.reduce((a,b)=>a+b,0)/total.length).toFixed(1):'—';$('#avgScore').textContent=avg;const stops=scores.map((s,i)=>`${colors[Math.min(4,Math.round(s)-1)]||'#282329'} ${i/cats.length*100}% ${(i+1)/cats.length*100}%`).join(',');$('#radar').style.background=`conic-gradient(${stops})`;$('#legend').innerHTML=cats.map((c,i)=>`<span><i style="background:${colors[Math.min(4,Math.round(scores[i])-1)]||'#3a343b'}"></i>${c}</span>`).join('');renderList()}
+function renderList(){let test=state.resultTab==='yes'?v=>v>=4:state.resultTab==='curious'?v=>v===3:v=>v<=2;let rows=prompts.map((p,i)=>({...p,id:i,v:state.answers[i]})).filter(p=>p.v&&test(p.v)).sort((a,b)=>state.resultTab==='no'?a.v-b.v:b.v-a.v);$('#resultList').innerHTML=rows.length?rows.slice(0,7).map((p,i)=>`<div class="result-row" style="animation-delay:${i*.04}s"><b>${p.v}</b><span>${p[0]}</span><small>${p[1]}</small></div>`).join(''):`<p class="empty-result">Nothing here yet.<br>Keep exploring the deck.</p>`}
+async function copyList(){const lines=prompts.map((p,i)=>state.answers[i]?`${labels[state.answers[i]-1]} — ${p[0]}`:null).filter(Boolean);if(!lines.length)return toast('Rate a few cards first.');await navigator.clipboard.writeText(`HEATCHECK\n\n${lines.join('\n')}\n\nA conversation starter, not consent.`);toast('Your list is copied.')}
+function renderAll(){renderCards();updateStats()}
+setup();

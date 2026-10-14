@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b090c">
+  <title>HEATCHECK — know your yes</title>
+  <meta name="description" content="A private, consent-first kink discovery game for adults.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <section class="gate" id="gate" aria-labelledby="gateTitle">
+    <div class="gate-card">
+      <p class="eyebrow">Private by design · 18+ only</p>
+      <h1 id="gateTitle">Before we turn up the heat.</h1>
+      <p>HEATCHECK is an adult self-reflection game. Every activity assumes informed, enthusiastic consent between adults. A “no” needs no explanation.</p>
+      <label class="check"><input type="checkbox" id="adultCheck"><span>I confirm I’m 18 or older</span></label>
+      <button class="primary" id="enterBtn" disabled>Enter the game <span>↗</span></button>
+      <p class="micro">Your choices stay in this browser. No account. No judgment.</p>
+    </div>
+  </section>
+
+  <div class="app" id="app" aria-hidden="true">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Heatcheck home"><i></i> HEATCHECK</a>
+      <div class="top-actions">
+        <button class="text-btn" id="soundBtn" aria-pressed="true">Sound on</button>
+        <button class="pill" id="resultsBtn">My pulse <span id="resultCount">0</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">An adult desire deck</p>
+          <h1>Know your <em>yes.</em><br>Own your <em>no.</em></h1>
+          <p class="lede">Read the room inside your head. Rate 48 prompts from “hard no” to “hell yes,” then see the shape of your curiosity.</p>
+          <div class="hero-actions">
+            <button class="primary" id="startBtn">Start the deck <span>↓</span></button>
+            <button class="secondary" id="shuffleHero">Shuffle my first draw</button>
+          </div>
+        </div>
+        <div class="orb-wrap" aria-hidden="true">
+          <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+          <div class="orb"><div class="orb-liquid"></div><span>48</span><small>prompts</small></div>
+          <span class="float-label l1">LIMITS</span><span class="float-label l2">CURIOSITY</span><span class="float-label l3">DESIRE</span>
+        </div>
+        <div class="scroll-note">SCROLL TO PLAY <span>↓</span></div>
+      </section>
+
+      <section class="game-section" id="play">
+        <div class="section-head">
+          <div><p class="eyebrow">01 · The deck</p><h2>What’s your temperature?</h2></div>
+          <div class="progress-meta"><span id="progressText">0 / 48 explored</span><div class="progress"><i id="progressBar"></i></div></div>
+        </div>
+
+        <div class="filters" id="filters" aria-label="Filter prompt categories"></div>
+
+        <div class="game-grid">
+          <aside class="heat-rail" aria-label="Your response distribution">
+            <p>Your pulse</p>
+            <div class="meter-stack" id="meterStack"></div>
+            <button class="text-btn" id="randomBtn">↝ Random draw</button>
+          </aside>
+
+          <div class="deck-zone">
+            <div class="cards" id="cards" aria-live="polite"></div>
+            <div class="deck-controls">
+              <button class="round-btn" id="prevBtn" aria-label="Previous card">←</button>
+              <p><span id="cardIndex">01</span> / <span id="deckTotal">48</span></p>
+              <button class="round-btn" id="nextBtn" aria-label="Next card">→</button>
+            </div>
+          </div>
+
+          <aside class="intel">
+            <div class="intensity-badge" id="intensityBadge">LOW HEAT</div>
+            <p class="category-label" id="categoryLabel">DYNAMICS</p>
+            <h3 id="sideTitle">The prompt changes as you play.</h3>
+            <p id="sideCopy">Go with your first instinct. You can change any answer later.</p>
+            <div class="safety-note"><span>✦</span><p><b>Consent stays live.</b> Any activity can stop at any moment, for any reason.</p></div>
+            <p class="keyhint">Keyboard: <kbd>1</kbd>–<kbd>5</kbd> to rate · <kbd>→</kbd> next</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="results" id="results">
+        <div class="section-head">
+          <div><p class="eyebrow">02 · Your pulse</p><h2>A map, not a mandate.</h2></div>
+          <p class="section-note">Desire can be fluid. This snapshot belongs to today.</p>
+        </div>
+        <div class="results-grid">
+          <div class="radar-card">
+            <div class="radar" id="radar"><div class="radar-core"><strong id="avgScore">—</strong><span>average heat</span></div></div>
+            <div class="legend" id="legend"></div>
+          </div>
+          <div class="result-list-card">
+            <div class="result-tabs"><button class="active" data-result="yes">Top yeses</button><button data-result="curious">Curious</button><button data-result="no">Clear limits</button></div>
+            <div id="resultList" class="result-list"></div>
+            <div class="result-actions"><button class="primary" id="copyBtn">Copy my list <span>↗</span></button><button class="secondary" id="resetBtn">Reset</button></div>
+          </div>
+        </div>
+        <div class="ethics-strip"><strong>Talk before you play.</strong><span>Share boundaries</span><span>Agree on signals</span><span>Plan aftercare</span><span>Check in after</span></div>
+      </section>
+    </main>
+
+    <footer><a class="brand" href="#"><i></i> HEATCHECK</a><p>For consenting adults. Built for honest conversations.</p><button class="text-btn" id="privacyBtn">Privacy</button></footer>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
